@@ -1,0 +1,33 @@
+
+$fondo: blue;
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+header {
+    height: 50px;
+    
+    * {
+        display: inline;
+    }
+    
+    #header_user_panel {
+        float: right;
+        padding: 5px;
+        margin: {
+            top: 50%;
+            right: 30px;
+        }
+        border: 1px solid brown;
+    }
+}
+
+#content {
+    height: 90%;
+    background-color: $fondo;
+}

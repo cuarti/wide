@@ -1,0 +1,26 @@
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
+header {
+  height: 50px;
+}
+header * {
+  display: inline;
+}
+header #header_user_panel {
+  float: right;
+  padding: 5px;
+  margin-top: 50%;
+  margin-right: 30px;
+  border: 1px solid brown;
+}
+
+#content {
+  height: 90%;
+  background-color: blue;
+}
