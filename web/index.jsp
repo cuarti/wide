@@ -9,9 +9,11 @@
         <title>WIDE - HOME</title>
         <link rel="stylesheet" href="style/reset.css" />
         <link rel="stylesheet" href="style/sass/main.css" />
+        <script type="text/javascript" src="js/libs/jquery-1.9.0.js" ></script>
+        <script type="text/javascript" src="js/common.js" ></script>
     </head>
     <body>
-        <c:import url="includes/header.jsp" />
+        <c:import url="include/header.jsp" />
         <div id="content" >
             
         </div>

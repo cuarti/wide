@@ -7,7 +7,9 @@ body {
 }
 
 header {
-  height: 50px;
+  height: 30px;
+  padding: 10px;
+  background-color: red;
 }
 header * {
   display: inline;
@@ -15,12 +17,12 @@ header * {
 header #header_user_panel {
   float: right;
   padding: 5px;
-  margin-top: 50%;
+  /*top: 50%;*/
   margin-right: 30px;
   border: 1px solid brown;
 }
 
-#content {
-  height: 90%;
-  background-color: blue;
-}
+/*#content {
+    height: 90%;
+    background-color: $fondo;
+}*/
