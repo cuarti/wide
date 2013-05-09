@@ -1,7 +1,7 @@
 
-package wide.files;
+package wide.model.files;
 
-import wide.files.exceptions.NotFileTypeException;
+import wide.exceptions.files.NotFileTypeException;
 
 /**
  * Interficie que fa referencia a un fitxer(fitxer o carpeta)

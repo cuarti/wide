@@ -1,16 +1,30 @@
 
-package wide.entity;
+package wide.model;
 
+import java.io.Serializable;
 import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Classe que fa referencia a un usuari
  * @author cuarti
  */
-public class User implements Follower, Following {
+@Entity
+@Table(name="USERS")
+public class User implements Follower, Following, Serializable {
     
-    private int id;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Column(unique=true)
     private String name;
+    @Column(unique=true)
     private String mail;
     private String password;
     private List<Project> projects;
@@ -18,32 +32,38 @@ public class User implements Follower, Following {
     private List<Follower> followersList;
 
     //<editor-fold defaultstate="collapsed" desc=" Constructors ">
+    /**
+     * Constructor classe User.
+     * Constructor buit.
+     */
     public User() {
     }
     
-    public User(int id, String name, String mail) {
-        this.id = id;
-        this.name = name;
-        this.mail = mail;
-    }
-
+    /**
+     * Constructor de la classe User.
+     * Constructor de creació de nous usuaris.
+     * @param name
+     * @param mail
+     * @param password 
+     */
     public User(String name, String mail, String password) {
         this.name = name;
         this.mail = mail;
         this.password = password;
     }
 
-    public User(String name, String mail, String password, List<Project> projects, 
-            List<Following> followingList, List<Follower> followersList) {
-        this.name = name;
-        this.mail = mail;
-        this.password = password;
-        this.projects = projects;
-        this.followingList = followingList;
-        this.followersList = followersList;
-    }
-
-    public User(int id, String name, String mail, String password, List<Project> projects, 
+    /**
+     * Constructor de la classe User.
+     * Constructor amb tots els atributs.
+     * @param id
+     * @param name
+     * @param mail
+     * @param password
+     * @param projects
+     * @param followingList
+     * @param followersList 
+     */
+    public User(Long id, String name, String mail, String password, List<Project> projects, 
             List<Following> followingList, List<Follower> followersList) {
         this.id = id;
         this.name = name;
@@ -56,11 +76,11 @@ public class User implements Follower, Following {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc=" Getters & Setters ">
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

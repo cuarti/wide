@@ -8,9 +8,10 @@
         <meta charset="utf-8">
         <title>WIDE - HOME</title>
         <link rel="stylesheet" href="style/reset.css" />
-        <link rel="stylesheet" href="style/sass/main.css" />
+        <link rel="stylesheet" href="style/sass/common.css" />
         <script type="text/javascript" src="js/libs/jquery-1.9.0.js" ></script>
         <script type="text/javascript" src="js/common.js" ></script>
+        <script type="text/javascript" src="js/authentication.js" ></script>
     </head>
     <body>
         <c:import url="include/header.jsp" />
@@ -19,5 +20,6 @@
         </div>
         <footer>
         </footer>
+        <c:import url="include/modal_window.jsp" />
     </body>
 </html>

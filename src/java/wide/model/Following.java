@@ -1,5 +1,5 @@
 
-package wide.entity;
+package wide.model;
 
 import java.util.List;
 

@@ -1,10 +1,10 @@
-package wide.files;
+package wide.model.files;
 
 import java.io.File;
 import java.io.IOException;
-import wide.files.exceptions.NotDirectoryFileException;
-import wide.files.exceptions.NotExistingFileException;
-import wide.files.exceptions.NotNormalFileException;
+import wide.exceptions.files.NotDirectoryFileException;
+import wide.exceptions.files.NotExistingFileException;
+import wide.exceptions.files.NotNormalFileException;
 
 public class FileBuilderImpl extends FileBuilder {
 

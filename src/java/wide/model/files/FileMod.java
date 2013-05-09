@@ -1,8 +1,8 @@
 
-package wide.files;
+package wide.model.files;
 
 import java.io.File;
-import wide.files.exceptions.NotNormalFileException;
+import wide.exceptions.files.NotNormalFileException;
 
 /**
  * Classe que fa referencia a un fitxer.

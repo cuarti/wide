@@ -1,7 +1,7 @@
 
-package wide.files;
+package wide.model.files;
 
-import wide.files.exceptions.NotDirectoryFileException;
+import wide.exceptions.files.NotDirectoryFileException;
 import java.io.File;
 
 /**

@@ -1,5 +1,5 @@
 
-package wide.files.exceptions;
+package wide.exceptions.files;
 
 import java.io.File;
 import java.io.IOException;

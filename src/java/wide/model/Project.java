@@ -1,8 +1,8 @@
 
-package wide.entity;
+package wide.model;
 
 import java.util.ArrayList;
-import wide.files.FileMod;
+import wide.model.files.FileMod;
 import java.util.List;
 
 public class Project implements Following {

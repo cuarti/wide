@@ -1,5 +1,5 @@
 
-package wide.entity;
+package wide.model;
 
 public class Tag {
     
