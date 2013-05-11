@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 /**
@@ -27,6 +28,8 @@ public class User implements Follower, Following, Serializable {
     @Column(unique=true)
     private String mail;
     private String password;
+    private String description;
+    @ManyToMany
     private List<Project> projects;
     private List<Following> followingList;
     private List<Follower> followersList;
@@ -59,16 +62,18 @@ public class User implements Follower, Following, Serializable {
      * @param name
      * @param mail
      * @param password
+     * @param description
      * @param projects
      * @param followingList
      * @param followersList 
      */
-    public User(Long id, String name, String mail, String password, List<Project> projects, 
-            List<Following> followingList, List<Follower> followersList) {
+    public User(Long id, String name, String mail, String password, String description, 
+            List<Project> projects, List<Following> followingList, List<Follower> followersList) {
         this.id = id;
         this.name = name;
         this.mail = mail;
         this.password = password;
+        this.description = description;
         this.projects = projects;
         this.followingList = followingList;
         this.followersList = followersList;
@@ -107,6 +112,14 @@ public class User implements Follower, Following, Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+    
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public List<Project> getProjects() {
         return projects;
@@ -137,10 +150,34 @@ public class User implements Follower, Following, Serializable {
     }
     //</editor-fold>
     
+    public boolean hasProject(Long id) {
+        
+        for(Project project : projects) {
+            if(id == project.getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean hasProject(String title) {
+        
+        for(Project project : projects) {
+            if(title.equals(project.getTitle())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public void addProject(Project project) {
+        projects.add(project);
+    }
+    
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", name=" + name + ", mail=" + mail + 
-                ", password=" + password + ", projects=" + projects + 
+        return "User{" + "id=" + id + ", name=" + name + ", mail=" + mail + ", password=" + 
+                password + ", description=" + description + ", projects=" + projects + 
                 ", followingList=" + followingList + ", followersList=" + followersList + '}';
     }
     

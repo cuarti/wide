@@ -1,48 +1,44 @@
 
 package wide.test;
 
-import java.util.List;
+import java.util.Scanner;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import wide.database.UserService;
+import wide.database.UserServiceBuilder;
 import wide.model.User;
 
 public class UserTest {
     public static void main(String[] args) {
         
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("widePU");
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = Persistence.createEntityManagerFactory("widePU").createEntityManager();
+        EntityTransaction tr = em.getTransaction();
+        UserService us = UserServiceBuilder.newInstance(em).newUserService();
         
-        UserService service = new UserService(em);
+//        tr.begin();
+//        us.createUser("cuarti", "cuarti1992@gmail.com", "00000");
+//        tr.commit();
         
-        em.getTransaction().begin();
-//        
-        User user1 = service.createUser("cuarti", "cuarti1992@gmail.com", "0000");
-        System.out.println("user1 creat: " + user1);
-//                
-//        service.removeUser(user1.getId());
-//        System.out.println("user1 eliminat");
-//        
-//        User user2 = service.createUser("albert", "1111", "aasldm2@gmail.com");
-//        System.out.println("user2 creat: " + user2);
-//        
-        em.getTransaction().commit();
-//        
-//        User user3 = service.findUserById(user2.getId());
-//        System.out.println("user3 trobat per id: " + user3);
-//        
-//        User user4 = service.findUserByName("albert");
-//        System.out.println("user4 trobat per name: " + user4);
+        User user = us.findUserByName("cuarti");
+        System.out.println("User finded: " + user);
         
-        User user5 = service.findUserByMail("cuarti1992@gmail.com");
-        System.out.println("user5 trobat per mail: " + user5);
+        Scanner entrada = new Scanner(System.in);
         
-        List<User> users = service.findAllUsers();
-        System.out.println("users = " + users);
-        for(User u : users) {
-            System.out.println("user = " + u);
-        }
+        System.out.print("New description: ");
+        String description = entrada.nextLine();
+        
+        user.setDescription(description);
+        
+        tr.begin();
+        us.updateUser(user);
+        tr.commit();
+        
+        System.out.println("Changes added.");
+        
+        user = us.findUserByName("cuarti");
+        System.out.println("User finded: " + user);
         
     }
 }

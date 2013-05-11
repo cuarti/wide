@@ -3,6 +3,7 @@
   <persistence-unit name="widePU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>wide.model.User</class>
+    <class>wide.model.Project</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/wide?zeroDateTimeBehavior=convertToNull"/>

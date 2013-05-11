@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.servlet.ServletException;
@@ -14,19 +13,27 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import wide.database.UserService;
+import wide.database.UserServiceBuilder;
 import wide.model.User;
 
 @WebServlet(name = "authenticationController", urlPatterns = {"/authentication"})
 public class authenticationController extends HttpServlet {
 
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("widePU");
-    private EntityManager em = emf.createEntityManager();
-    private UserService service = new UserService(em);
+    private EntityManager em = Persistence.createEntityManagerFactory("widePU").createEntityManager();
     private EntityTransaction tr = em.getTransaction();
-    
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    private UserService us = UserServiceBuilder.newInstance(em).newUserService();
 
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        response.getWriter().println("ASDAS");
+        doPost(request, response);
+    }
+ 
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
         switch (request.getParameter("action")) {
             case "signIn":
                 signIn(request, response);
@@ -38,18 +45,7 @@ public class authenticationController extends HttpServlet {
                 signOut(request, response);
                 break;
         }
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+        
     }
 
     private void signIn(HttpServletRequest request, HttpServletResponse response) 
@@ -59,9 +55,9 @@ public class authenticationController extends HttpServlet {
         
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-
-        User user = service.findUserByName(username);
         
+        User user = us.findUserByName(username);
+
         if(user == null) {
             errorsList.add("The username doesn\'t exist.");
         }
@@ -79,6 +75,7 @@ public class authenticationController extends HttpServlet {
         Gson gson = new Gson();
         String json = gson.toJson(new AjaxResponse(user, errorsList));
         response.getWriter().println(json);
+
     }
     
     private void signUp(HttpServletRequest request, HttpServletResponse response) 
@@ -89,7 +86,6 @@ public class authenticationController extends HttpServlet {
         String username = request.getParameter("username");
         String mail = request.getParameter("mail");
         String password = request.getParameter("password");
-        String Cpassword = request.getParameter("confirmPassword");
         
         if(username.length() < 5) {
             errorsList.add("The username length is shorter than 5.");
@@ -100,14 +96,14 @@ public class authenticationController extends HttpServlet {
         if(!username.matches("[a-zA-Z0-9]*")) {
             errorsList.add("The username has special characters.");
         }
-        if(service.findUserByName(username) != null) {
+        if(us.findUserByName(username) != null) {
             errorsList.add("The username already exists.");
         }
         
         if(!mail.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             errorsList.add("The mail address is incorrect");
         }
-        if(service.findUserByMail(mail) != null) {
+        if(us.findUserByMail(mail) != null) {
             errorsList.add("The mail address already exists.");
         }
         
@@ -130,7 +126,7 @@ public class authenticationController extends HttpServlet {
             user = new User(username, mail, password);
             
             tr.begin();
-            service.createUser(username, mail, password);
+            us.createUser(username, mail, password);
             tr.commit();
             
             request.getSession().setAttribute("user", user);
@@ -158,7 +154,21 @@ public class authenticationController extends HttpServlet {
             }
             else {
                 this.user = user;
+//                this.user.setPassword(null);
             }
         }
     }
+//    
+//    @Override
+//    public void init() throws ServletException {
+//        super.init();
+//
+//        EntityManagerFactory emf = Persistence.createEntityManagerFactory("widePU");
+//        em = emf.createEntityManager();
+//        tr = em.getTransaction();
+//
+//        UserServiceBuilder usb = UserServiceBuilder.newInstance(em);
+//        us = usb.newUserService();
+//
+//    }
 }

@@ -1,14 +1,25 @@
 
 package wide.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import wide.model.files.FileMod;
 import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
-public class Project implements Following {
+@Entity
+public class Project implements Following, Serializable {
     
-    private int id;
-    private String name;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    private String title;
+    @ManyToMany(mappedBy = "projects")
     private List<User> users;
     private List<FileMod> files;
     private List<String> images; //nombre de las imagenes. Posibilidad de usar un objeto Image
@@ -21,19 +32,16 @@ public class Project implements Following {
     public Project() {
     }
 
-    public Project(String name, String description, String logo, List<Tag> tags, User user) {
-        this.name = name;
-        this.description = description;
-        this.logo = logo;
-        this.tags = tags;
+    public Project(String title, User user) {
+        this.title = title;
         
         users = new ArrayList<>();
         users.add(user);
     }
     
-    public Project(String name, List<User> users, List<FileMod> files, List<String> images, 
+    public Project(String title, List<User> users, List<FileMod> files, List<String> images, 
             String description, String logo, List<Tag> tags, List<Follower> followersList) {
-        this.name = name;
+        this.title = title;
         this.users = users;
         this.files = files;
         this.images = images;
@@ -43,10 +51,10 @@ public class Project implements Following {
         this.followersList = followersList;
     }
 
-    public Project(int id, String name, List<User> users, List<FileMod> files, List<String> images, 
+    public Project(Long id, String title, List<User> users, List<FileMod> files, List<String> images, 
             String description, String logo, List<Tag> tags, List<Follower> followersList) {
         this.id = id;
-        this.name = name;
+        this.title = title;
         this.users = users;
         this.files = files;
         this.images = images;
@@ -58,20 +66,20 @@ public class Project implements Following {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc=" Getters & Setters ">
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public List<User> getUsers() {
@@ -136,7 +144,7 @@ public class Project implements Following {
     
     @Override
     public String toString() {
-        return "Project{" + "id=" + id + ", name=" + name + ", users=" + users + ", files=" + 
+        return "Project{" + "id=" + id + ", title=" + title + ", users=" + users + ", files=" + 
                 files + ", images=" + images + ", description=" + description + ", logo=" + 
                 logo + ", tags=" + tags + ", followersList=" + followersList + '}';
     }
