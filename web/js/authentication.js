@@ -55,10 +55,10 @@ function submitSignIn() {
         data: json,
         beforeSend: function() {
             showInfoModal();
-            $('#info_modal .window').html(
+            $('#info_modal .window .content').prepend(
                     '<p>Connecting with the server...</p>' +
                     '<p>Authenticating user...</p>' +
-                    '<p>Please wait</p>');
+                    '<p>Please wait!</p>');
         },
         success: function(data) {
             signIn(data);
