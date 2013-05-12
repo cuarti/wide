@@ -8,7 +8,7 @@ public interface UserService {
 
     public User createUser(String name, String mail, String password);
 
-    public void updateUser(User user);
+    public User updateUser(User user);
     
     public void removeUser(Long id);
 

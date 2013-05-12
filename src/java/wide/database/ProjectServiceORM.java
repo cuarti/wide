@@ -28,8 +28,9 @@ public class ProjectServiceORM implements ProjectService {
     }
     
     @Override
-    public void updateProject(Project project) {
+    public Project updateProject(Project project) {
         em.persist(project);
+        return project;
     }
 
     @Override

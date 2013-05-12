@@ -14,7 +14,7 @@ public interface ProjectService {
     
     public Project createProject(String title, User user);
 
-    public void updateProject(Project project);
+    public Project updateProject(Project project);
     
     public void removeProject(Long id);
 

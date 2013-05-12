@@ -22,8 +22,9 @@ public class UserServiceORM implements UserService {
     }
     
     @Override
-    public void updateUser(User user) {
+    public User updateUser(User user) {
         em.persist(user);
+        return user;
     }
 
     @Override
