@@ -158,5 +158,18 @@ header {
         border: 1px solid gray;
         border-radius: 4px;
         box-shadow: 0 0 10px black;
+        
+        .content {
+            float: left;
+            
+            p {
+                font-size: 150%;
+            }
+        }
+        
+        img {
+            float: right;
+            height: 100%;
+        }
     }
 }

@@ -135,3 +135,13 @@ header #header_user_panel:hover {
   border-radius: 4px;
   box-shadow: 0 0 10px black;
 }
+#info_modal .window .content {
+  float: left;
+}
+#info_modal .window .content p {
+  font-size: 150%;
+}
+#info_modal .window img {
+  float: right;
+  height: 100%;
+}
