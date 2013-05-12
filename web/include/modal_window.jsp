@@ -11,5 +11,8 @@
     </div>
 </div>
 <div id="info_modal" >
-    <div class="window" ></div>
+    <div class="window" >
+        <div class="content" ></div>
+        <img src="images/loading.gif" />
+    </div>
 </div>
