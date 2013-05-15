@@ -46,17 +46,19 @@ public class ProjectServiceORM implements ProjectService {
         return em.find(Project.class, id);
     }
 
+    /*No functiona*/
     @Override
-    public List<Project> findProjectsByTitle(String title) {
+    public Project findProjectByTitle(String title, String username) {
         try {
-            TypedQuery<Project> query = em.createQuery("SELECT p from Project p WHERE p.title = ?1", Project.class);
-            return query.setParameter(1, title).getResultList();
+            TypedQuery<Project> query = em.createQuery("SELECT p from Project p " +
+                    "WHERE p.title = ?1 AND p.user.name = ?2", Project.class);
+            return query.setParameter(1, title).setParameter(2, username).getSingleResult();
         } catch (NoResultException ex) {
             return null;
         }
     }
 
-    //No implementado aun
+    /*Aun no implementado*/
     @Override
     public List<Project> findProjectByTags(List<Tag> tags) {
         throw new UnsupportedOperationException("Not supported yet.");

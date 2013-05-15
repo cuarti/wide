@@ -1,9 +1,11 @@
-package wide.controller;
+ package wide.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
@@ -12,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import wide.database.UserService;
 import wide.database.UserServiceBuilder;
 import wide.model.User;
@@ -24,16 +27,15 @@ public class authenticationController extends HttpServlet {
     private UserService us = UserServiceBuilder.newInstance(em).newUserService();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.getWriter().println("ASDAS");
         doPost(request, response);
     }
- 
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         switch (request.getParameter("action")) {
             case "signIn":
                 signIn(request, response);
@@ -45,130 +47,103 @@ public class authenticationController extends HttpServlet {
                 signOut(request, response);
                 break;
         }
-        
+
     }
 
-    private void signIn(HttpServletRequest request, HttpServletResponse response) 
+    private void signIn(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
-        List<String> errorsList = new ArrayList<>();
-        
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        
+
         User user = us.findUserByName(username);
 
-        if(user == null) {
-            errorsList.add("The username doesn\'t exist.");
-        }
-        else if(!user.getPassword().equals(password)) {
-            errorsList.add("The password is incorrect.");
+        Gson gson = new GsonBuilder().create();
+        JsonObject json = new JsonObject();
+        JsonArray errorsList = new JsonArray();
+        
+        if (user == null) {
+            errorsList.add(new JsonPrimitive("The username doesn\'t exist."));
+        } else if (!user.getPassword().equals(password)) {
+            errorsList.add(new JsonPrimitive("The password is incorrect."));
         }
         
-        if(errorsList.isEmpty()) {
-            request.getSession().setAttribute("user", user);
+        if(errorsList.size() == 0) {
+            HttpSession session = request.getSession();
+            session.setAttribute("userSession", user);
+            
+            json.add("username", new JsonPrimitive(username));
+        } else {
+            json.add("errors", errorsList);
         }
-        else {
-            user = null;
-        }
-        
-        Gson gson = new Gson();
-        String json = gson.toJson(new AjaxResponse(user, errorsList));
-        response.getWriter().println(json);
+        response.getWriter().println(gson.toJson(json));
 
     }
-    
-    private void signUp(HttpServletRequest request, HttpServletResponse response) 
+
+    private void signUp(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        
-        List<String> errorsList = new ArrayList<>();
         
         String username = request.getParameter("username");
         String mail = request.getParameter("mail");
         String password = request.getParameter("password");
+
+        Gson gson = new GsonBuilder().create();
+        JsonObject json = new JsonObject();
+        JsonArray errorsList = new JsonArray();
         
-        if(username.length() < 5) {
-            errorsList.add("The username length is shorter than 5.");
+        if (username.length() < 5) {
+            errorsList.add(new JsonPrimitive("The username length is shorter than 5."));
         }
-        if(username.length() > 30) {
-            errorsList.add("The username length is bigger than 30.");
+        if (username.length() > 30) {
+            errorsList.add(new JsonPrimitive("The username length is bigger than 30."));
         }
-        if(!username.matches("[a-zA-Z0-9]*")) {
-            errorsList.add("The username has special characters.");
+        if (!username.matches("[a-zA-Z0-9]*")) {
+            errorsList.add(new JsonPrimitive("The username has special characters."));
         }
-        if(us.findUserByName(username) != null) {
-            errorsList.add("The username already exists.");
+        if (us.findUserByName(username) != null) {
+            errorsList.add(new JsonPrimitive("The username already exists."));
         }
-        
-        if(!mail.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            errorsList.add("The mail address is incorrect");
+
+        if (!mail.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            errorsList.add(new JsonPrimitive("The mail address is incorrect"));
         }
-        if(us.findUserByMail(mail) != null) {
-            errorsList.add("The mail address already exists.");
+        if (us.findUserByMail(mail) != null) {
+            errorsList.add(new JsonPrimitive("The mail address already exists."));
         }
-        
-        if(password.length() < 5) {
-            errorsList.add("The password length is shorter than 5.");
+
+        if (password.length() < 5) {
+            errorsList.add(new JsonPrimitive("The password length is shorter than 5."));
         }
-        if(password.length() > 30) {
-            errorsList.add("The password length is bigger than 30.");
+        if (password.length() > 30) {
+            errorsList.add(new JsonPrimitive("The password length is bigger than 30."));
         }
-        if(!password.matches("[a-zA-Z0-9]*")) {
-            errorsList.add("The password has special characters.");
+        if (!password.matches("[a-zA-Z0-9]*")) {
+            errorsList.add(new JsonPrimitive("The password has special characters."));
         }
-        if(!password.equals(request.getParameter("confirmPassword"))) {
-            errorsList.add("The password confirmation is diferent than the password");
+        if (!password.equals(request.getParameter("confirmPassword"))) {
+            errorsList.add(new JsonPrimitive("The password confirmation is diferent than the password"));
         }
-        
-        User user = null;
-        
-        if(errorsList.isEmpty()) {
-            user = new User(username, mail, password);
-            
+
+        if (errorsList.size() == 0) {
+
             tr.begin();
-            us.createUser(username, mail, password);
+            User user = us.createUser(username, mail, password);
             tr.commit();
-            
-            request.getSession().setAttribute("user", user);
+
+            request.getSession().setAttribute("userSession", user);
+            json.add("username", new JsonPrimitive(username));
         }
-        
-        Gson gson = new Gson();
-        String json = gson.toJson(new AjaxResponse(user, errorsList));
-        response.getWriter().println(json);
+        else {
+            json.add("errors", errorsList);
+        }
+
+        response.getWriter().println(gson.toJson(json));
     }
 
-    private void signOut(HttpServletRequest request, HttpServletResponse response) 
+    private void signOut(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        
+
         request.getSession().invalidate();
-        
+
     }
-    
-    private class AjaxResponse {
-        private User user;
-        private List<String> errorsList;
-        
-        public AjaxResponse(User user, List<String> errorsList) {
-            if(user == null) {
-                this.errorsList = errorsList;
-            }
-            else {
-                this.user = user;
-//                this.user.setPassword(null);
-            }
-        }
-    }
-//    
-//    @Override
-//    public void init() throws ServletException {
-//        super.init();
-//
-//        EntityManagerFactory emf = Persistence.createEntityManagerFactory("widePU");
-//        em = emf.createEntityManager();
-//        tr = em.getTransaction();
-//
-//        UserServiceBuilder usb = UserServiceBuilder.newInstance(em);
-//        us = usb.newUserService();
-//
-//    }
 }

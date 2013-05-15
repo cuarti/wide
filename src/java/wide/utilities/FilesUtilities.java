@@ -3,11 +3,9 @@ package wide.utilities;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import wide.exceptions.files.NotDirectoryFileException;
 import wide.exceptions.files.NotExistingFileException;
-import wide.model.files.Directory;
+import wide.model.Project;
 import wide.model.files.FileBuilder;
 
 /**
@@ -28,24 +26,32 @@ public class FilesUtilities {
         return new FilesUtilities();
     }
     
-    public File createProject(Long id) throws NotDirectoryFileException, 
+    public File createProjectDirectory(Project project) throws NotDirectoryFileException, 
             SecurityException, IOException {
         try { 
-            return builder.createNewDirectory(rootFile, id.toString());  
+            return builder.createNewDirectory(rootFile, project.getId().toString());  
         } catch (NotExistingFileException ex) { 
             rootFile.mkdir();
-            createProject(id); 
+            createProjectDirectory(project); 
         }        
         return null;
     }
     
-    public File getProject(Long id) throws NotDirectoryFileException, 
+    public File getProjectDirectory(Project project) throws NotDirectoryFileException, 
             SecurityException, IOException {
         try {
-            return builder.getDirectory(rootFile, id.toString());
+            return builder.getDirectory(rootFile, project.getId().toString());
         } catch (NotExistingFileException ex) {
-            createProject(id);
+            createProjectDirectory(project);
         }
         return null;
     }
+
+    public static String getRootPath() {
+        return rootPath;
+    }
+
+    public static File getRootFile() {
+        return rootFile;
+    }  
 }

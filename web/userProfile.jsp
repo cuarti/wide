@@ -11,9 +11,9 @@
     </head>
     <body>
         <c:import url="include/header.jsp" />
-        <div id="content" >
+        <div id="content" class="user" >
 
-            <c:if test="${ user.name eq userProfile.name }" >
+            <c:if test="${ userSession.id eq user.id }" >
                 <div>
                     <h1>New Project</h1>
                     <form action="project" method="GET" >
@@ -24,18 +24,30 @@
                 </div>
             </c:if>
 
-            <h1>${ userProfile.name }</h1>
-            <p>${ userProfile.mail }</p>
+            <c:if test="${ !empty messageResponse }" >
+                <div>${ messageResponse }</div>
+            </c:if>
+            
+            <div class="name" >${ user.name }</div>
+            <div class="mail" >${ user.mail }</p>
+            
+            <div class="description" >${ user.description }</div>
 
-            <c:if test=" ${ !empty userProfile.projects }" >
-                <c:forEach var="i" begin="0" end="5" >
-                    <c:set var="u" value="${ userProfile.projects[i] }" />
-                    <c:if test="${ !empty u }" >
-                        <p>${ u.name }</p>
-                    </c:if>
+            Projects:
+            <c:if test="${ !empty user.projects }" >
+                <c:forEach var="p" items="${ user.projects }" >
+                    <div>
+                    <a href="social?action=project&value=${ p.id }" >${ p.title }</a>
+                    </div>
                 </c:forEach>
             </c:if>
-
+            
+            Following:
+            <c:if test="${ !empty user.following }" >
+                <c:forEach var="f" items="${ user.following }" >
+                    <p>${ f.title }</p>
+                </c:forEach>
+            </c:if>
         </div>
         <footer>
         </footer>

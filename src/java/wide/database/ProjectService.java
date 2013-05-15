@@ -20,7 +20,7 @@ public interface ProjectService {
 
     public Project findProjectById(Long id);
 
-    public List<Project> findProjectsByTitle(String title);
+    public Project findProjectByTitle(String title, String username);
     
     public List<Project> findProjectByTags(List<Tag> tags);
 

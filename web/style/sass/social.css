@@ -1,0 +1,43 @@
+#content.project .title {
+  padding-bottom: 0.75em;
+  font-size: 300%;
+  font-weight: bold;
+}
+#content.project .title:first-letter {
+  /*to uppercase*/
+}
+#content.project .content_left, #content.project .content_middle, #content.project .content_right {
+  height: 85%;
+}
+#content.project .content_left .module, #content.project .content_middle .module, #content.project .content_right .module {
+  border: 1px solid black;
+  margin-bottom: 2%;
+}
+#content.project .content_left .module div, #content.project .content_middle .module div, #content.project .content_right .module div {
+  overflow: auto;
+  height: 90%;
+}
+#content.project .logo {
+  height: 30%;
+}
+#content.project .description {
+  height: 59%;
+}
+#content.project .tags {
+  height: 8%;
+}
+#content.project .files {
+  height: 100%;
+}
+#content.project .images {
+  height: 35.5%;
+}
+#content.project .users {
+  height: 20%;
+}
+#content.project .followers {
+  height: 20%;
+}
+#content.project .otherProjects {
+  height: 20%;
+}

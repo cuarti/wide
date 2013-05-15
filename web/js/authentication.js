@@ -113,16 +113,16 @@ function submitSignOut() {
 
 function signIn(data) {
     hideInfoModal();
-    if (data.user === undefined) {
+    if (data.username === undefined) {
         var errors = "";
-        $.each(data.errorsList, function(key, value) {
+        $.each(data.errors, function(key, value) {
             errors += value;
         });
         alert(errors);
     }
     else {
         hideModal();
-        $('#header_user_panel').html('<h3>' + data.user.name +
+        $('#header_user_panel').html('<h3>' + data.username +
                 '</h3><span class="sign_out" >Sign out</span>');
         $('header .menu').append('<button type="submit" class="editor" >Editor</button>');
     }

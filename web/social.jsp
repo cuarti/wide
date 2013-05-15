@@ -12,7 +12,7 @@
     <body>
         <c:import url="include/header.jsp" />
         <div id="content" >
-            <a href="social?action=user&value=cuarti" >User</a> 
+            <a href="social?action=user&value=cuarti" >cuarti</a> 
         </div>
         <footer>
         </footer>

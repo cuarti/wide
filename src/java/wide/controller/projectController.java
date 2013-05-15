@@ -47,54 +47,33 @@ public class projectController extends HttpServlet {
         HttpSession session = request.getSession();
 
         String title = request.getParameter("title").trim();
-        User user = (User) session.getAttribute("user");
-
+        Long userId = ((User) session.getAttribute("userSession")).getId();
+        User user = us.findUserById(userId);
+        
         if (title == null || title.isEmpty()) {
-            request.setAttribute("error", "The title project can't be empty.");
+            request.setAttribute("messageResponse", "The project title can't be empty.");
         } else if (user.hasProject(title)) {
-            request.setAttribute("error", "The title project already exists");
+            request.setAttribute("messageResponse", "The project title already exists.");
         } else {
-            response.getWriter().println("Starts the data persistence.");
-//            try {
-//                tr.begin();
-//                
-//                Project project = ps.createProject(title, user);
-//                response.getWriter().println("Project created: " + project);
-//                user.addProject(project);
-//                us.updateUser(user);
-//                response.getWriter().println("User updated: " + user);
-//
-//                session.setAttribute("user", user);
-//                fu.createProject(project.getId());
-//                
-//                tr.commit();
-//                response.getWriter().println("Commit did");
-//            } catch (NotDirectoryFileException | SecurityException | IOException ex) {
-//                tr.rollback();
-//                response.getWriter().println(ex.getMessage());
-//            }
-//            response.getWriter().println("Ends the persistence.");
+            try {
+
+                tr.begin();
+                Project project = ps.createProject(title, user);
+                user.addProject(project);
+                us.updateUser(user);
+                tr.commit();       
+
+                fu.createProjectDirectory(project);
+                session.setAttribute("userSession", user);
+                request.setAttribute("messageResponse", "The project has been created successfully.");
+                
+            } catch (Exception ex) {
+                tr.rollback();
+                request.setAttribute("messageResponse", "Has ocurred a problem. Please try it again later.");
+            }
         }
-        response.getWriter().println(request.getAttribute("error"));
-        response.getWriter().println(user.getProjects());
-//        request.getRequestDispatcher("projects.jsp").forward(request, response);
+        request.setAttribute("user", user);
+        request.getRequestDispatcher("userProfile.jsp").forward(request, response);
 
     }
-
-//    @Override
-//    public void init() throws ServletException {
-//        super.init();
-//
-//        EntityManagerFactory emf = Persistence.createEntityManagerFactory("widePU");
-//        em = emf.createEntityManager();
-//        tr = em.getTransaction();
-//
-//        ProjectServiceBuilder psb = ProjectServiceBuilder.newInstance(em);
-//        ps = psb.newProjectService();
-//
-//        UserServiceBuilder usb = UserServiceBuilder.newInstance(em);
-//        us = usb.newUserService();
-//
-//        fu = FilesUtilities.newInstance();
-//    }
 }

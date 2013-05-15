@@ -30,10 +30,29 @@ header #header_user_panel:hover {
   cursor: pointer;
 }
 
-/*#content {
-    height: 90%;
-    
-}*/
+#content {
+  padding: 1% 2%;
+  height: 88%;
+  overflow: hidden;
+}
+#content .content_left {
+  height: 100%;
+  width: 20%;
+  float: left;
+  margin-right: 2%;
+}
+#content .content_middle {
+  height: 100%;
+  width: 56%;
+  float: left;
+  margin-right: 2%;
+}
+#content .content_right {
+  height: 100%;
+  width: 20%;
+  float: right;
+}
+
 #modal {
   top: 0;
   left: 0;
@@ -144,4 +163,8 @@ header #header_user_panel:hover {
 #info_modal .window img {
   float: right;
   height: 100%;
+}
+
+.bold {
+  font-weight: bold;
 }

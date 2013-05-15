@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface Follower {
     
-    public List<Following> getFollowingList();
-    public void setFollowingList(List<Following> followingList);
+    public List<Following> getFollowing();
+    public void setFollowing(List<Following> following);
     
 }

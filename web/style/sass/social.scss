@@ -1,0 +1,64 @@
+
+#content.project {
+    
+    .title {
+        padding-bottom: 0.75em;
+        font-size: 300%;
+        font-weight: bold;
+    }
+    
+    .title:first-letter {
+        /*to uppercase*/
+    }
+    
+    .content_left, .content_middle, .content_right {
+        height: 85%;
+        
+        .module {
+            border: 1px solid black;
+            margin-bottom: 2%;
+            
+            div {
+                overflow: auto;
+                height: 90%;
+            }
+        }
+    }
+    
+    .logo {
+        height: 30%;
+    }
+    
+    .description {
+        height: 59%;
+    }
+    
+    .tags {
+        height: 8%;
+    }
+    
+    .files {
+        height: 100%;
+    }
+    
+    .images {
+        height: 35.5%;
+    }
+    
+    .users {
+        height: 20%;
+    }
+    
+    .followers {
+        height: 20%;
+    }
+    
+    .otherProjects {
+        height: 20%;
+    }
+}
+
+#content.user {
+    
+    
+}

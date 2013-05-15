@@ -2,6 +2,8 @@
 package wide.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * Classe que fa referencia a un usuari
@@ -17,7 +21,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="USERS")
-public class User implements Follower, Following, Serializable {
+public class User implements Follower, Serializable {
     
     private static final long serialVersionUID = 1L;
     @Id
@@ -28,11 +32,13 @@ public class User implements Follower, Following, Serializable {
     @Column(unique=true)
     private String mail;
     private String password;
+    private String picture;
     private String description;
+    @Temporal(TemporalType.DATE)
+    private Date createdDate;
     @ManyToMany
     private List<Project> projects;
-    private List<Following> followingList;
-    private List<Follower> followersList;
+    private List<Following> following;
 
     //<editor-fold defaultstate="collapsed" desc=" Constructors ">
     /**
@@ -53,33 +59,12 @@ public class User implements Follower, Following, Serializable {
         this.name = name;
         this.mail = mail;
         this.password = password;
+        createdDate = new Date();
+        projects = new ArrayList<>();
     }
 
-    /**
-     * Constructor de la classe User.
-     * Constructor amb tots els atributs.
-     * @param id
-     * @param name
-     * @param mail
-     * @param password
-     * @param description
-     * @param projects
-     * @param followingList
-     * @param followersList 
-     */
-    public User(Long id, String name, String mail, String password, String description, 
-            List<Project> projects, List<Following> followingList, List<Follower> followersList) {
-        this.id = id;
-        this.name = name;
-        this.mail = mail;
-        this.password = password;
-        this.description = description;
-        this.projects = projects;
-        this.followingList = followingList;
-        this.followersList = followersList;
-    }
     //</editor-fold>
-
+    
     //<editor-fold defaultstate="collapsed" desc=" Getters & Setters ">
     public Long getId() {
         return id;
@@ -112,13 +97,29 @@ public class User implements Follower, Following, Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public List<Project> getProjects() {
@@ -128,30 +129,19 @@ public class User implements Follower, Following, Serializable {
     public void setProjects(List<Project> projects) {
         this.projects = projects;
     }
-    
+
     @Override
-    public List<Following> getFollowingList() {
-        return followingList;
+    public List<Following> getFollowing() {
+        return following;
     }
 
     @Override
-    public void setFollowingList(List<Following> followingList) {
-        this.followingList = followingList;
-    }
-
-    @Override
-    public List<Follower> getFollowersList() {
-        return followersList;
-    }
-
-    @Override
-    public void setFollowersList(List<Follower> followersList) {
-        this.followersList = followersList;
+    public void setFollowing(List<Following> following) {
+        this.following = following;
     }
     //</editor-fold>
     
     public boolean hasProject(Long id) {
-        
         for(Project project : projects) {
             if(id == project.getId()) {
                 return true;
@@ -161,7 +151,6 @@ public class User implements Follower, Following, Serializable {
     }
     
     public boolean hasProject(String title) {
-        
         for(Project project : projects) {
             if(title.equals(project.getTitle())) {
                 return true;
@@ -170,15 +159,25 @@ public class User implements Follower, Following, Serializable {
         return false;
     }
     
+    public Project getProjectByTitle(String title) {
+        for(Project project : projects) {
+            if(title.equals(project.getTitle())) {
+                return project;
+            }
+        }
+        return null;
+    }
+    
     public void addProject(Project project) {
         projects.add(project);
     }
-    
+
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", name=" + name + ", mail=" + mail + ", password=" + 
-                password + ", description=" + description + ", projects=" + projects + 
-                ", followingList=" + followingList + ", followersList=" + followersList + '}';
-    }
+        return "User{" + "id=" + id + ", name=" + name + ", mail=" + mail + 
+                ", password=" + password + ", picture=" + picture + 
+                ", description=" + description + ", createdDate=" + createdDate + 
+                ", projects=" + projects + ", following=" + following + '}';
+    }   
     
 }
